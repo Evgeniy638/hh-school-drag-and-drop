@@ -1,0 +1,58 @@
+.drag-and-drop {
+    margin: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.drag-and-drop__element {
+    background-color: blueviolet;
+    width: 100px;
+    height: 100px;
+}
+
+.drag-and-drop__element_float {
+    float: left;
+}
+
+.drag-and-drop__element_absolute {
+    position: absolute;
+}
+
+.drag-and-drop__element_avatar {
+    opacity: .4;
+    position: fixed;
+    pointer-events: none;
+}
+
+.drag-and-drop__field {
+    background-color: cornsilk;
+    border-radius: 5px;
+    min-height: 230px;
+    overflow: hidden;
+}
+
+.drag-and-drop__field_absolute {
+    position: relative;
+}
+
+.drag-and-drop__field-wrap {
+    margin: 20px;
+    text-align: center;
+}
+
+.drag-and-drop__fields-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+}
+
+@media (max-width: 700px) {
+    .drag-and-drop__fields-container {
+        grid-template-columns: 1fr;
+    }
+}
