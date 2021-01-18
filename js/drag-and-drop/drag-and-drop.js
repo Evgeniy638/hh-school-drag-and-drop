@@ -15,13 +15,18 @@ function setRandomBackgroundColor(element) {
     element.style.backgroundColor = getRandomColor();
 }
 
-function initAvatar(dragAndDropElement, clientX, clientY) {
+function initAvatar(dragAndDropElement, dragAndDrop, clientX, clientY) {
     const box = dragAndDropElement.getBoundingClientRect();
+
+    if (avatar !== null) {
+        deleteAvatar();
+    }
 
     avatar = {
         element: dragAndDropElement.cloneNode(),
         shiftX: box.width / 2,
-        shiftY: box.height / 2
+        shiftY: box.height / 2,
+        dragAndDrop
     }
 
     avatar.element.classList.add("drag-and-drop__element_avatar");
@@ -63,12 +68,21 @@ function appendAvatarToFieldFloat(field) {
     field.appendChild(avatar.element.cloneNode());
 }
 
-document.querySelectorAll(".drag-and-drop__element").forEach((dragAndDropElement) => {
+function checkFieldByCordinates(field, clientX, clientY) {
+    const box = field.getBoundingClientRect();
+
+    return clientX >= box.left && clientX <= box.right &&
+        clientY >= box.top && clientY <= box.bottom;
+}
+
+document.querySelectorAll(".drag-and-drop").forEach((dragAndDrop) => {
+    const dragAndDropElement = dragAndDrop.querySelector(".drag-and-drop__element");
+    
     setRandomBackgroundColor(dragAndDropElement);
 
     dragAndDropElement.addEventListener("pointerdown", (e) => {
-        initAvatar(e.currentTarget);
-        moveAvatar(e.clientX, e.clientY);
+        dragAndDrop.classList.add("drag-and-drop_touch-none");
+        initAvatar(e.currentTarget, dragAndDrop, e.clientX, e.clientY);
     });
 });
 
@@ -78,16 +92,21 @@ document.body.addEventListener("pointermove", (e) => {
     }
 });
 
-document.addEventListener("pointerup", (e) => {
+
+document.body.addEventListener("pointerup", (e) => {
     if (avatar !== null) {
-        const field = e.target.closest(".drag-and-drop__field");
+        const fieldAbsolute = avatar.dragAndDrop.querySelector(".drag-and-drop__field_absolute");
+        const fieldFloat = avatar.dragAndDrop.querySelector(".drag-and-drop__field_float");
 
-        if (field !== null && field.classList.contains("drag-and-drop__field_absolute")) {
-            appendAvatarToFieldAbsolute(field, e.clientX, e.clientY);
 
-        } else if (field !== null && field.classList.contains("drag-and-drop__field_float")) {
-            appendAvatarToFieldFloat(field);
+        if (checkFieldByCordinates(fieldAbsolute, e.clientX, e.clientY)) {
+            appendAvatarToFieldAbsolute(fieldAbsolute, e.clientX, e.clientY);
+
+        } else if (checkFieldByCordinates(fieldFloat, e.clientX, e.clientY)) {
+            appendAvatarToFieldFloat(fieldFloat);
         }
+
+        avatar.dragAndDrop.classList.remove("drag-and-drop_touch-none");
 
         deleteAvatar();
     }

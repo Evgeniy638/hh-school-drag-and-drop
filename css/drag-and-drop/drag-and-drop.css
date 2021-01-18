@@ -1,5 +1,4 @@
 .drag-and-drop {
-    margin: 30px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -7,6 +6,10 @@
     -khtml-user-select: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+.drag-and-drop_touch-none {
+    touch-action: none;
 }
 
 .drag-and-drop__element {
@@ -26,7 +29,6 @@
 .drag-and-drop__element_avatar {
     opacity: .4;
     position: fixed;
-    pointer-events: none;
 }
 
 .drag-and-drop__field {
@@ -52,6 +54,10 @@
 }
 
 @media (max-width: 700px) {
+    /* .drag-and-drop {
+        margin: 0;
+    } */
+
     .drag-and-drop__fields-container {
         grid-template-columns: 1fr;
     }
