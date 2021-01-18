@@ -75,6 +75,26 @@ function checkFieldByCordinates(field, clientX, clientY) {
         clientY >= box.top && clientY <= box.bottom;
 }
 
+let idVerticalScrolling;
+
+function handlerVerticalScroll(e) {
+    if (idVerticalScrolling !== undefined) {
+        clearInterval(idVerticalScrolling);
+    }
+
+    if (e.clientY - 100 < 0) {
+        idVerticalScrolling = setInterval(() => {
+            window.scrollBy({top: -10});
+        }, 20);
+    }
+
+    if (e.clientY + 100 > document.documentElement.clientHeight) {
+        idVerticalScrolling = setInterval(() => {
+            window.scrollBy({top: 10});
+        }, 20);
+    }
+}
+
 document.querySelectorAll(".drag-and-drop").forEach((dragAndDrop) => {
     const dragAndDropElement = dragAndDrop.querySelector(".drag-and-drop__element");
     
@@ -83,6 +103,7 @@ document.querySelectorAll(".drag-and-drop").forEach((dragAndDrop) => {
     dragAndDropElement.addEventListener("pointerdown", (e) => {
         dragAndDrop.classList.add("drag-and-drop_touch-none");
         initAvatar(e.currentTarget, dragAndDrop, e.clientX, e.clientY);
+        document.body.addEventListener("pointermove", handlerVerticalScroll);
     });
 });
 
@@ -109,5 +130,8 @@ document.body.addEventListener("pointerup", (e) => {
         avatar.dragAndDrop.classList.remove("drag-and-drop_touch-none");
 
         deleteAvatar();
+
+        clearInterval(idVerticalScrolling);
+        document.body.removeEventListener("pointermove", handlerVerticalScroll);
     }
 });
